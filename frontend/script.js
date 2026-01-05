@@ -2,6 +2,14 @@ const form = document.getElementById("analyzeForm");
 const loading = document.getElementById("loading");
 const result = document.getElementById("result");
 
+/*
+  IMPORTANT:
+  Set this to your backend URL (Wasmer / Defang / ngrok / VPS)
+  Example:
+  const API_BASE_URL = "https://crop-disease-ai.wasmer.app";
+*/
+const API_BASE_URL = "https://agent-ai-project-kisan.onrender.com/";
+
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -24,8 +32,7 @@ form.addEventListener("submit", async (e) => {
     formData.append("file", imageFile);
 
     try {
-        // ✅ Vercel-compatible API call (relative path)
-        const response = await fetch("/analyze/image", {
+        const response = await fetch(`${API_BASE_URL}/analyze/image`, {
             method: "POST",
             body: formData
         });
@@ -40,7 +47,7 @@ form.addEventListener("submit", async (e) => {
             data.disease?.disease || "Unknown";
 
         document.getElementById("confidence").innerText =
-            data.disease?.confidence
+            data.disease?.confidence !== undefined
                 ? (data.disease.confidence * 100).toFixed(1) + "%"
                 : "N/A";
 
