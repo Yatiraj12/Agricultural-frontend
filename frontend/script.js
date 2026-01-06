@@ -4,7 +4,7 @@ const result = document.getElementById("result");
 
 /*
   IMPORTANT:
-  Backend base URL must NOT end with a slash
+  Backend base URL must NOT end with '/'
 */
 const API_BASE_URL = "https://agent-ai-project-kisan.onrender.com";
 
@@ -20,14 +20,13 @@ form.addEventListener("submit", async (e) => {
 
     if (!imageFile) {
         alert("Please upload an image.");
-        loading.classList.add("hidden");
         return;
     }
 
     const formData = new FormData();
-    formData.append("crop", crop);
-    formData.append("language", language);
-    formData.append("file", imageFile);
+    formData.append("crop", crop);        // ✅ matches Form(...)
+    formData.append("language", language); // ✅ matches Form("en")
+    formData.append("file", imageFile);    // ✅ matches UploadFile = File(...)
 
     try {
         const response = await fetch(`${API_BASE_URL}/analyze/image`, {
@@ -42,6 +41,9 @@ form.addEventListener("submit", async (e) => {
 
         const data = await response.json();
 
+        // ------------------------------
+        // Populate UI
+        // ------------------------------
         document.getElementById("disease").innerText =
             data.disease?.disease || "Unknown";
 
