@@ -4,11 +4,9 @@ const result = document.getElementById("result");
 
 /*
   IMPORTANT:
-  Set this to your backend URL (Wasmer / Defang / ngrok / VPS)
-  Example:
-  const API_BASE_URL = "https://crop-disease-ai.wasmer.app";
+  Backend base URL must NOT end with a slash
 */
-const API_BASE_URL = "https://agent-ai-project-kisan.onrender.com/";
+const API_BASE_URL = "https://agent-ai-project-kisan.onrender.com";
 
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -38,7 +36,8 @@ form.addEventListener("submit", async (e) => {
         });
 
         if (!response.ok) {
-            throw new Error(`Server error: ${response.status}`);
+            const errorText = await response.text();
+            throw new Error(`Server error ${response.status}: ${errorText}`);
         }
 
         const data = await response.json();
@@ -81,6 +80,6 @@ form.addEventListener("submit", async (e) => {
     } catch (err) {
         loading.classList.add("hidden");
         alert("Unable to analyze image. Please try again later.");
-        console.error("Analysis error:", err);
+        console.error("Analysis error:", err.message);
     }
 });
